@@ -1,0 +1,23 @@
+import { Router } from "express";
+import { UserController } from "../Controllers/UserController";
+import isAuth from "../middlewares/isAuth";
+import { authMiddleware } from "../middlewares/attachCurretnUser";
+
+const routes = Router();
+
+routes.post("/user/signup", new UserController().signUp);
+routes.post("/user/login", new UserController().login);
+routes.get(
+  "/followers",
+  isAuth,
+  authMiddleware,
+  new UserController().getFollowers
+);
+routes.get(
+  "/followings",
+  isAuth,
+  authMiddleware,
+  new UserController().getFollowings
+);
+
+export default routes;
