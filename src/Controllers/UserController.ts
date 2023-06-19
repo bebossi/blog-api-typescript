@@ -94,4 +94,30 @@ export class UserController {
       return res.status(400).json(err);
     }
   }
+
+  async updateUser(req: Request, res: Response) {
+    try {
+      const userId = req.currentUser?.id as number | undefined;
+
+      const user = await userRepository.findOne({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        return res.status(404).json({ error: "user not found" });
+      }
+
+      user.userName = req.body.userName;
+      user.email = req.body.email;
+
+      const saltRounds = 10; // Number of salt rounds for bcrypt
+      const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+      user.password = hashedPassword;
+
+      await userRepository.save(user);
+      return res.status(200).json(user);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }

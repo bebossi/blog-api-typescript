@@ -28,8 +28,10 @@ export class PostController {
     try {
       const userId = req.currentUser?.id as number | undefined;
 
-      const currentUserProfile = await postRepository.find({
-        where: { userId: { id: userId } },
+      const currentUserProfile = await userRepository.findOne({
+        where: { id: userId },
+        relations: ["posts", "posts.comments", "posts.comments.userId"],
+        select: ["id", "userName", "email"],
       });
 
       return res.status(200).json(currentUserProfile);
@@ -87,7 +89,7 @@ export class PostController {
 
       const userProfile = await userRepository.findOne({
         where: { id: Number(userId) },
-        relations: ["posts"],
+        relations: ["posts", "posts.comments", "posts.comments.userId"],
         select: ["id", "userName", "email"],
       });
 
@@ -114,7 +116,12 @@ export class PostController {
 
   async feed(req: Request, res: Response) {
     try {
-      const feed = await postRepository.find();
+      const feed = await postRepository
+        .createQueryBuilder("post")
+        .leftJoinAndSelect("post.userId", "user")
+        .leftJoinAndSelect("post.comments", "comment")
+        .leftJoinAndSelect("comment.userId", "commentUser")
+        .getMany();
 
       return res.status(200).json(feed);
     } catch (err) {

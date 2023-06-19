@@ -19,5 +19,11 @@ routes.get(
   authMiddleware,
   new UserController().getFollowings
 );
+routes.put(
+  "/updateUser",
+  isAuth,
+  authMiddleware,
+  new UserController().updateUser
+);
 
 export default routes;

@@ -36,5 +36,5 @@ routes.delete(
   authMiddleware,
   new PostController().deletePost
 );
-routes.get("/feed", new PostController().feed);
+routes.get("/feed", isAuth, new PostController().feed);
 export default routes;
