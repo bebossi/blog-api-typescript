@@ -3,6 +3,7 @@ import { postRepository } from "../repositories/postRepository";
 import { User } from "../entities/User";
 import { Post } from "../entities/Post";
 import { userRepository } from "../repositories/userRepository";
+import { followRepository } from "../repositories/followRepository";
 
 export class PostController {
   async createPost(req: Request, res: Response) {
@@ -86,14 +87,33 @@ export class PostController {
   async userProfile(req: Request, res: Response) {
     try {
       const { userId } = req.params;
+      const currentUser = req.currentUser?.id as number;
 
       const userProfile = await userRepository.findOne({
         where: { id: Number(userId) },
-        relations: ["posts", "posts.comments", "posts.comments.userId"],
+        relations: [
+          "posts",
+          "posts.comments",
+          "posts.comments.userId",
+          "followers",
+          "followings",
+        ],
         select: ["id", "userName", "email"],
       });
 
-      return res.status(200).json(userProfile);
+      let isFollowing = false;
+
+      const existingFollow = await followRepository.findOne({
+        where: {
+          followerId: { id: currentUser },
+          followingId: { id: Number(userId) },
+        },
+      });
+      if (existingFollow) {
+        isFollowing = true;
+      }
+
+      return res.status(200).json({ userProfile, isFollowing });
     } catch (err) {
       console.log(err);
       return res.status(404).json(err);

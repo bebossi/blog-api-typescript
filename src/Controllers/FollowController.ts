@@ -21,9 +21,11 @@ export class FollowController {
 
       if (existingFollow) {
         console.log("You already follow this user");
-        return res
-          .status(400)
-          .json({ success: false, message: "You already follow this user" });
+        return res.status(400).json({
+          success: false,
+          message: "You already follow this user",
+          existingFollow: true,
+        });
       }
 
       const followUser = followRepository.create();
