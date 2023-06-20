@@ -31,7 +31,13 @@ export class PostController {
 
       const currentUserProfile = await userRepository.findOne({
         where: { id: userId },
-        relations: ["posts", "posts.comments", "posts.comments.userId"],
+        relations: [
+          "posts",
+          "posts.comments",
+          "posts.comments.userId",
+          "followers",
+          "followings",
+        ],
         select: ["id", "userName", "email"],
       });
 
