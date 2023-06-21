@@ -11,19 +11,32 @@ routes.get(
   "/followers",
   isAuth,
   authMiddleware,
-  new UserController().getFollowers
+  new UserController().getMyFollowers
 );
 routes.get(
   "/followings",
   isAuth,
   authMiddleware,
-  new UserController().getFollowings
+  new UserController().getMyFollowings
 );
 routes.put(
   "/updateUser",
   isAuth,
   authMiddleware,
   new UserController().updateUser
+);
+
+routes.get(
+  "/followers/:userId",
+  isAuth,
+  authMiddleware,
+  new UserController().getFollowers
+);
+routes.get(
+  "/followings/:userId",
+  isAuth,
+  authMiddleware,
+  new UserController().getFollowings
 );
 
 export default routes;

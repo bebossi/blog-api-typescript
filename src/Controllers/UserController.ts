@@ -1,3 +1,4 @@
+import { User } from "./../entities/User";
 import { userRepository } from "./../repositories/userRepository";
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
@@ -56,29 +57,32 @@ export class UserController {
     }
   }
 
-  async getFollowers(req: Request, res: Response) {
+  async getMyFollowers(req: Request, res: Response) {
     try {
       const userId = req.currentUser?.id as number;
 
-      // const user = await userRepository.findOne({
-      //   where: { id: userId },
-      //   relations: ["followers", "followers.followerId"],
-      //   select: ["followers"],
-      // });
-      // const followers = user?.followers.map((follow) => follow.followerId);
       const followers = await userRepository
         .createQueryBuilder("user")
         .leftJoinAndSelect("user.followers", "follow")
         .where("follow.followingId = :userId", { userId })
         .getMany();
+      const followings = await userRepository
+        .createQueryBuilder("user")
+        .leftJoinAndSelect("user.followings", "follow")
+        .where("follow.followerId = :userId", { userId })
+        .getMany();
 
-      return res.status(200).json(followers);
+      const isFollowFollower = followers.filter((follower) =>
+        followings.some((following) => following.id === follower.id)
+      );
+      console.log(isFollowFollower);
+      return res.status(200).json({ followers, isFollowFollower });
     } catch (err) {
       console.log(err);
     }
   }
 
-  async getFollowings(req: Request, res: Response) {
+  async getMyFollowings(req: Request, res: Response) {
     try {
       const userId = req.currentUser?.id as number;
 
@@ -116,6 +120,36 @@ export class UserController {
 
       await userRepository.save(user);
       return res.status(200).json(user);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async getFollowers(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
+
+      const followers = await userRepository
+        .createQueryBuilder("user")
+        .leftJoinAndSelect("user.followers", "follow")
+        .where("follow.followingId = :userId", { userId })
+        .getMany();
+
+      return res.status(200).json(followers);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async getFollowings(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
+      const followings = await userRepository
+        .createQueryBuilder("user")
+        .leftJoinAndSelect("user.followings", "follow")
+        .where("follow.followerId = :userId", { userId })
+        .getMany();
+
+      return res.status(200).json(followings);
     } catch (err) {
       console.log(err);
     }
