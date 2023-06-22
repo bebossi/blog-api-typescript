@@ -17,8 +17,8 @@ export class Post {
   @Column()
   content: string;
 
-  @Column()
-  imageUrl: string;
+  @Column("varchar", { nullable: true })
+  imageUrl: string | Express.Multer.File;
 
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: "userId" })
