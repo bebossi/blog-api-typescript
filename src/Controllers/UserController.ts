@@ -128,6 +128,7 @@ export class UserController {
   async getFollowers(req: Request, res: Response) {
     try {
       const { userId } = req.params;
+      const currentUser = req.currentUser?.id as User | number;
 
       const followers = await userRepository
         .createQueryBuilder("user")
@@ -135,7 +136,19 @@ export class UserController {
         .where("follow.followingId = :userId", { userId })
         .getMany();
 
-      return res.status(200).json(followers);
+      const followingsCurrentUser = await userRepository
+        .createQueryBuilder("user")
+        .leftJoinAndSelect("user.followings", "follow")
+        .where("follow.followerId = :currentUser", { currentUser })
+        .getMany();
+
+      const followHisFollowers = followers.filter((follower) => {
+        return followingsCurrentUser.some((following) => {
+          return follower.id === following.id;
+        });
+      });
+
+      return res.status(200).json({ followers, followHisFollowers });
     } catch (err) {
       console.log(err);
     }
@@ -143,13 +156,27 @@ export class UserController {
   async getFollowings(req: Request, res: Response) {
     try {
       const { userId } = req.params;
-      const followings = await userRepository
+      const currentUser = req.currentUser?.id as User | number;
+
+      const followingsUser = await userRepository
         .createQueryBuilder("user")
         .leftJoinAndSelect("user.followings", "follow")
         .where("follow.followerId = :userId", { userId })
         .getMany();
 
-      return res.status(200).json(followings);
+      const followingsCurrentUser = await userRepository
+        .createQueryBuilder("user")
+        .leftJoinAndSelect("user.followings", "follow")
+        .where("follow.followerId = :currentUser", { currentUser })
+        .getMany();
+
+      const sameFollowings = followingsUser.filter((following) => {
+        return followingsCurrentUser.some((myFollowing) => {
+          return myFollowing.id === following.id;
+        });
+      });
+
+      return res.status(200).json({ followingsUser, sameFollowings });
     } catch (err) {
       console.log(err);
     }
