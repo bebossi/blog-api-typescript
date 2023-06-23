@@ -24,6 +24,8 @@ export class Post {
   @JoinColumn({ name: "userId" })
   userId: User;
 
-  @OneToMany(() => Comment, (comment) => comment.postId)
+  @OneToMany(() => Comment, (comment) => comment.postId, {
+    onDelete: "CASCADE",
+  })
   comments: Comment[];
 }

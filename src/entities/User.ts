@@ -14,6 +14,9 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Column("varchar", { nullable: true })
+  imageUrl: string | Express.Multer.File;
+
   @Column()
   password: string;
 
