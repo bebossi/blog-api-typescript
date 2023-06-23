@@ -106,6 +106,7 @@ export class PostController {
         ],
         select: ["id", "userName", "email"],
       });
+      console.log(userProfile?.followers);
 
       let isFollowing = false;
 
@@ -142,11 +143,23 @@ export class PostController {
 
   async feed(req: Request, res: Response) {
     try {
+      const userId = req.currentUser?.id as User | number;
+
+      const followings = await userRepository
+        .createQueryBuilder("user")
+        .select(["user.id"])
+        .leftJoinAndSelect("user.followings", "follow")
+        .where("follow.followerId = :userId", { userId })
+        .getMany();
+
       const feed = await postRepository
         .createQueryBuilder("post")
         .leftJoinAndSelect("post.userId", "user")
         .leftJoinAndSelect("post.comments", "comment")
         .leftJoinAndSelect("comment.userId", "commentUser")
+        .where("user.id IN (:...followings)", {
+          followings: followings.map((following) => following.id),
+        })
         .getMany();
 
       return res.status(200).json(feed);
