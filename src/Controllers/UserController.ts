@@ -113,8 +113,9 @@ export class UserController {
 
       user.userName = req.body.userName;
       user.email = req.body.email;
+      user.imageUrl = req.body.imageUrl;
 
-      const saltRounds = 10; // Number of salt rounds for bcrypt
+      const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
       user.password = hashedPassword;
 

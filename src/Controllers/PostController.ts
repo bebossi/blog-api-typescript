@@ -38,7 +38,7 @@ export class PostController {
           "followers",
           "followings",
         ],
-        select: ["id", "userName", "email"],
+        select: ["id", "userName", "email", "imageUrl"],
       });
 
       return res.status(200).json(currentUserProfile);
