@@ -39,4 +39,6 @@ routes.get(
   new UserController().getFollowings
 );
 
+routes.get(`/search`, isAuth, authMiddleware, new UserController().searchBar);
+
 export default routes;

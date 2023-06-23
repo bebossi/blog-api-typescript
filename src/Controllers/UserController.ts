@@ -1,8 +1,10 @@
 import { User } from "./../entities/User";
 import { userRepository } from "./../repositories/userRepository";
+import { postRepository } from "../repositories/postRepository";
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../config/jwt.config";
+import { Like, ILike } from "typeorm";
 
 export class UserController {
   async signUp(req: Request, res: Response) {
@@ -180,6 +182,40 @@ export class UserController {
       return res.status(200).json({ followingsUser, sameFollowings });
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  async searchBar(req: Request, res: Response) {
+    try {
+      // const searchQuery = req.query as unknown as string;
+
+      const searchQuery = decodeURIComponent(req.query.query as string);
+
+      const userSearchResults = await userRepository.find({
+        where: [
+          {
+            userName: ILike(`%${searchQuery}%`),
+          },
+        ],
+      });
+
+      const postSearchResults = await postRepository.find({
+        where: [{ content: ILike(`%${searchQuery}%`) }],
+      });
+
+      const searchResults = {
+        users: userSearchResults,
+        posts: postSearchResults,
+      };
+      console.log(searchQuery);
+      console.log(searchResults);
+
+      return res.status(200).json(searchResults);
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(500)
+        .json({ error: "An error occurred during the search." });
     }
   }
 }

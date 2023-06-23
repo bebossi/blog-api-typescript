@@ -106,7 +106,6 @@ export class PostController {
         ],
         select: ["id", "userName", "email"],
       });
-      console.log(userProfile?.followers);
 
       let isFollowing = false;
 
