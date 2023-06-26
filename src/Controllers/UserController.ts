@@ -120,6 +120,7 @@ export class UserController {
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
       user.password = hashedPassword;
+      console.log(user);
 
       await userRepository.save(user);
       return res.status(200).json(user);
