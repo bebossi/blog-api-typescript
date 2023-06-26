@@ -32,11 +32,6 @@ export class FollowController {
       followUser.followerId = userId as User;
       followUser.followingId = followingId as User;
 
-      //   const followUser = followRepository.create({
-      //     followerId: { id: userId },
-      //     followingId: { id: Number(followingId) },
-      //   });
-
       await followRepository.save(followUser);
       console.log("Successfully followed user!");
       return res.status(200).json(followUser);

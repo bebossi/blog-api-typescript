@@ -4,6 +4,7 @@ import userRoutes from "./userRoutes";
 import express from "express";
 import commentRoutes from "./commentRoutes";
 import followRoutes from "./followRoutes";
+import likeRoutes from "./likeRoutes";
 import { uploadImageRouter } from "./uploadImages.routes";
 
 const app = express();
@@ -14,5 +15,6 @@ app.use(postRoutes);
 app.use(commentRoutes);
 app.use(followRoutes);
 app.use(uploadImageRouter);
+app.use(likeRoutes);
 
 export default app;

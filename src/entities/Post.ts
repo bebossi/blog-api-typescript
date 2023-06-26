@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { User } from "./User";
 import { Comment } from "./Comment";
+import { Like } from "./Like";
 
 @Entity("Posts")
 export class Post {
@@ -28,4 +29,7 @@ export class Post {
     onDelete: "CASCADE",
   })
   comments: Comment[];
+
+  @OneToMany(() => Like, (like) => like.postId)
+  likes: Like[];
 }
