@@ -201,6 +201,7 @@ export class UserController {
 
       const postSearchResults = await postRepository.find({
         where: [{ content: ILike(`%${searchQuery}%`) }],
+        relations: ["comments", "userId"],
       });
 
       const searchResults = {
