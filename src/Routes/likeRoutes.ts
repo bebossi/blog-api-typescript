@@ -18,5 +18,11 @@ routes.delete(
   authMiddleware,
   new LikeController().dislikePost
 );
+routes.get(
+  "/isLiked/:postId",
+  isAuth,
+  authMiddleware,
+  new LikeController().checkIfLiked
+);
 
 export default routes;

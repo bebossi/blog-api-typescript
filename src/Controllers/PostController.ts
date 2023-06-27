@@ -4,6 +4,7 @@ import { User } from "../entities/User";
 import { Post } from "../entities/Post";
 import { userRepository } from "../repositories/userRepository";
 import { followRepository } from "../repositories/followRepository";
+import { likeRepository } from "../repositories/likeRepository";
 
 export class PostController {
   async createPost(req: Request, res: Response) {

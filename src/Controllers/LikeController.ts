@@ -9,8 +9,6 @@ export class LikeController {
       const { postId } = req.params;
       const userId = req.currentUser?.id as number | undefined;
 
-      console.log(userId, postId);
-
       const like = likeRepository.create({
         userId: { id: userId },
         postId: { id: Number(postId) },
@@ -41,6 +39,30 @@ export class LikeController {
       await likeRepository.delete(dislike as Like);
 
       return res.status(200).json(dislike);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async checkIfLiked(req: Request, res: Response) {
+    try {
+      const { postId } = req.params;
+      const userId = req.currentUser?.id as number | undefined;
+
+      const postLiked = await likeRepository.findOne({
+        where: {
+          userId: { id: userId },
+          postId: { id: Number(postId) },
+        },
+        relations: ["postId"],
+      });
+      let isLiked = false;
+
+      if (postLiked) {
+        isLiked = true;
+      }
+
+      return res.status(200).json({ isLiked, postLiked });
     } catch (err) {
       console.log(err);
     }
