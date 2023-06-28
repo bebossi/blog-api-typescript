@@ -36,8 +36,11 @@ export class PostController {
           "posts",
           "posts.comments",
           "posts.comments.userId",
+          "posts.likes",
           "followers",
           "followings",
+          "likes.postId.comments.userId",
+          "likes.postId.userId",
         ],
         select: ["id", "userName", "email", "imageUrl", "password"],
       });
@@ -104,6 +107,8 @@ export class PostController {
           "posts.comments.userId",
           "followers",
           "followings",
+          "likes.postId.comments.userId",
+          "likes.postId.userId",
         ],
         select: ["id", "userName", "email"],
       });
