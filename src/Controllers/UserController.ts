@@ -91,6 +91,7 @@ export class UserController {
       const followings = await userRepository
         .createQueryBuilder("user")
         .leftJoinAndSelect("user.followings", "follow")
+        .select(["user.id", "user.imageUrl", "user.userName"])
         .where("follow.followerId = :userId", { userId })
         .getMany();
 
@@ -179,7 +180,9 @@ export class UserController {
         });
       });
 
-      return res.status(200).json({ followingsUser, sameFollowings });
+      return res
+        .status(200)
+        .json({ followingsUser, sameFollowings, followingsCurrentUser });
     } catch (err) {
       console.log(err);
     }

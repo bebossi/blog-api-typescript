@@ -27,7 +27,6 @@ export class FollowController {
           existingFollow: true,
         });
       }
-
       const followUser = followRepository.create();
       followUser.followerId = userId as User;
       followUser.followingId = followingId as User;
@@ -43,15 +42,14 @@ export class FollowController {
   async unfollowUser(req: Request, res: Response) {
     try {
       const { followingId } = req.params;
-      const userId = req.currentUser?.id;
+      const currentUser = req.currentUser?.id;
 
       const unfollowUser = await followRepository.findOne({
         where: {
-          followerId: { id: userId },
+          followerId: { id: currentUser },
           followingId: { id: Number(followingId) },
         },
       });
-
       await followRepository.delete(unfollowUser as Follow);
 
       return res.status(200).json(unfollowUser);

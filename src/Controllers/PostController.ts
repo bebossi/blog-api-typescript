@@ -132,7 +132,7 @@ export class PostController {
       const { postId } = req.params;
       const post = await postRepository.findOne({
         where: { id: Number(postId) },
-        relations: ["comments", "comments.userId"],
+        relations: ["comments", "comments.userId", "userId"],
       });
       return res.status(200).json(post);
     } catch (err) {

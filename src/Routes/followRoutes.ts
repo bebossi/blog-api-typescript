@@ -13,6 +13,8 @@ routes.post(
 );
 routes.delete(
   "/unfollowUser/:followingId",
+  isAuth,
+  authMiddleware,
   new FollowController().unfollowUser
 );
 
