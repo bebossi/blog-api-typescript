@@ -30,6 +30,8 @@ export class Post {
   })
   comments: Comment[];
 
-  @OneToMany(() => Like, (like) => like.postId)
+  @OneToMany(() => Like, (like) => like.postId, {
+    onDelete: "CASCADE",
+  })
   likes: Like[];
 }
