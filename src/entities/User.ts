@@ -18,7 +18,7 @@ export class User {
   @Column("varchar", { nullable: true })
   imageUrl: string | Express.Multer.File;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @OneToMany(() => Follow, (follow) => follow.followerId)

@@ -42,7 +42,7 @@ export class PostController {
           "likes.postId.comments.userId",
           "likes.postId.userId",
         ],
-        select: ["id", "userName", "email", "imageUrl", "password"],
+        select: ["id", "userName", "email", "imageUrl"],
       });
 
       return res.status(200).json(currentUserProfile);

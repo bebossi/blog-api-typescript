@@ -118,9 +118,9 @@ export class UserController {
       user.email = req.body.email;
       user.imageUrl = req.body.imageUrl;
 
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
-      user.password = hashedPassword;
+      // const saltRounds = 10;
+      // const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+      // user.password = hashedPassword;
 
       await userRepository.save(user);
       return res.status(200).json(user);
