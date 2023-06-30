@@ -5,6 +5,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../config/jwt.config";
 import { Like, ILike } from "typeorm";
+import { searchRepository } from "../repositories/searchRepository";
 
 export class UserController {
   async signUp(req: Request, res: Response) {
@@ -183,41 +184,6 @@ export class UserController {
         .json({ followingsUser, sameFollowings, followingsCurrentUser });
     } catch (err) {
       console.log(err);
-    }
-  }
-
-  async searchBar(req: Request, res: Response) {
-    try {
-      // const searchQuery = req.query as unknown as string;
-
-      const searchQuery = decodeURIComponent(req.query.query as string);
-
-      const userSearchResults = await userRepository.find({
-        where: [
-          {
-            userName: ILike(`%${searchQuery}%`),
-          },
-        ],
-      });
-
-      const postSearchResults = await postRepository.find({
-        where: [{ content: ILike(`%${searchQuery}%`) }],
-        relations: ["comments", "userId"],
-      });
-
-      const searchResults = {
-        users: userSearchResults,
-        posts: postSearchResults,
-      };
-      console.log(searchQuery);
-      console.log(searchResults);
-
-      return res.status(200).json(searchResults);
-    } catch (err) {
-      console.log(err);
-      return res
-        .status(500)
-        .json({ error: "An error occurred during the search." });
     }
   }
 }

@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const postRoutes_1 = __importDefault(require("./postRoutes"));
+const body_parser_1 = __importDefault(require("body-parser"));
+const userRoutes_1 = __importDefault(require("./userRoutes"));
+const express_1 = __importDefault(require("express"));
+const commentRoutes_1 = __importDefault(require("./commentRoutes"));
+const followRoutes_1 = __importDefault(require("./followRoutes"));
+const likeRoutes_1 = __importDefault(require("./likeRoutes"));
+const uploadImages_routes_1 = require("./uploadImages.routes");
+const app = (0, express_1.default)();
+app.use(body_parser_1.default.json());
+app.use(userRoutes_1.default);
+app.use(postRoutes_1.default);
+app.use(commentRoutes_1.default);
+app.use(followRoutes_1.default);
+app.use(uploadImages_routes_1.uploadImageRouter);
+app.use(likeRoutes_1.default);
+exports.default = app;

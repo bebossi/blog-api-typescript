@@ -3,6 +3,7 @@ import { Follow } from "./Follow";
 import { Post } from "./Post";
 import { Comment } from "./Comment";
 import { Like } from "./Like";
+import { Search } from "./Searchhistory";
 
 @Entity("Users")
 export class User {
@@ -35,4 +36,9 @@ export class User {
 
   @OneToMany(() => Like, (like) => like.userId)
   likes: Like[];
+
+  @OneToMany(() => Search, (search) => search.userId, {
+    onDelete: "CASCADE",
+  })
+  searches: Search[];
 }

@@ -6,6 +6,7 @@ import commentRoutes from "./commentRoutes";
 import followRoutes from "./followRoutes";
 import likeRoutes from "./likeRoutes";
 import { uploadImageRouter } from "./uploadImages.routes";
+import searchRoutes from "./searchRoutes";
 
 const app = express();
 
@@ -16,5 +17,6 @@ app.use(commentRoutes);
 app.use(followRoutes);
 app.use(uploadImageRouter);
 app.use(likeRoutes);
+app.use(searchRoutes);
 
 export default app;
