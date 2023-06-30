@@ -52,7 +52,12 @@ export class SearchController {
         where: {
           userId: { id: currentUser },
         },
+        order: {
+          createdAt: "DESC",
+        },
+        take: 5,
       });
+
       return res.status(200).json(searches);
     } catch (err) {
       console.log(err);
