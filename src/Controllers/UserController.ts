@@ -33,13 +33,16 @@ export class UserController {
     try {
       const { email, password } = req.body;
 
-      const user = await userRepository.findOne({ where: { email: email } });
+      const user = await userRepository.findOne({
+        where: { email: email },
+        select: ["id", "password", "email", "userName"],
+      });
 
       if (!user) {
         return res.status(401);
       }
-
-      const isValidPassword = await bcrypt.compare(password, user.password);
+      console.log(user);
+      const isValidPassword = await bcrypt.compare(password, user?.password);
 
       if (!isValidPassword) {
         return res.status(401);
@@ -117,10 +120,6 @@ export class UserController {
       user.userName = req.body.userName;
       user.email = req.body.email;
       user.imageUrl = req.body.imageUrl;
-
-      // const saltRounds = 10;
-      // const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
-      // user.password = hashedPassword;
 
       await userRepository.save(user);
       return res.status(200).json(user);
