@@ -5,6 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  CreateDateColumn,
 } from "typeorm";
 import { User } from "./User";
 
@@ -19,4 +20,7 @@ export class Search {
   @ManyToOne(() => User, (user) => user.searches)
   @JoinColumn({ name: "userId" })
   userId: User;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }

@@ -53,7 +53,6 @@ export class SearchController {
           userId: { id: currentUser },
         },
       });
-      console.log(searches);
       return res.status(200).json(searches);
     } catch (err) {
       console.log(err);
