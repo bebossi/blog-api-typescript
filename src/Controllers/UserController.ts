@@ -41,7 +41,6 @@ export class UserController {
       if (!user) {
         return res.status(401);
       }
-      console.log(user);
       const isValidPassword = await bcrypt.compare(password, user?.password);
 
       if (!isValidPassword) {
