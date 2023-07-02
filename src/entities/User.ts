@@ -11,6 +11,8 @@ import { Post } from "./Post";
 import { Comment } from "./Comment";
 import { Like } from "./Like";
 import { Search } from "./Searchhistory";
+import { Chat } from "./Chat";
+import { Message } from "./Message";
 
 @Entity("Users")
 export class User {
@@ -48,4 +50,18 @@ export class User {
     onDelete: "CASCADE",
   })
   searches: Search[];
+
+  @ManyToMany(() => Chat, (chat) => chat.users)
+  @JoinTable()
+  chats: Chat[];
+
+  @OneToMany(() => Message, (message) => message.senderId, {
+    onDelete: "CASCADE",
+  })
+  sentMessages: Message[];
+
+  @OneToMany(() => Message, (message) => message.recipientId, {
+    onDelete: "CASCADE",
+  })
+  recievedMessages: Message[];
 }
