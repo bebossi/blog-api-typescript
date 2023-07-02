@@ -14,10 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const userRepository_1 = require("./../repositories/userRepository");
-const postRepository_1 = require("../repositories/postRepository");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jwt_config_1 = require("../config/jwt.config");
-const typeorm_1 = require("typeorm");
 class UserController {
     signUp(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -187,37 +185,6 @@ class UserController {
             }
             catch (err) {
                 console.log(err);
-            }
-        });
-    }
-    searchBar(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const searchQuery = decodeURIComponent(req.query.query);
-                const userSearchResults = yield userRepository_1.userRepository.find({
-                    where: [
-                        {
-                            userName: (0, typeorm_1.ILike)(`%${searchQuery}%`),
-                        },
-                    ],
-                });
-                const postSearchResults = yield postRepository_1.postRepository.find({
-                    where: [{ content: (0, typeorm_1.ILike)(`%${searchQuery}%`) }],
-                    relations: ["comments", "userId"],
-                });
-                const searchResults = {
-                    users: userSearchResults,
-                    posts: postSearchResults,
-                };
-                console.log(searchQuery);
-                console.log(searchResults);
-                return res.status(200).json(searchResults);
-            }
-            catch (err) {
-                console.log(err);
-                return res
-                    .status(500)
-                    .json({ error: "An error occurred during the search." });
             }
         });
     }

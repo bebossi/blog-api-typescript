@@ -15,6 +15,7 @@ const Follow_1 = require("./Follow");
 const Post_1 = require("./Post");
 const Comment_1 = require("./Comment");
 const Like_1 = require("./Like");
+const Searchhistory_1 = require("./Searchhistory");
 let User = exports.User = class User {
 };
 __decorate([
@@ -57,6 +58,12 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => Like_1.Like, (like) => like.userId),
     __metadata("design:type", Array)
 ], User.prototype, "likes", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => Searchhistory_1.Search, (search) => search.userId, {
+        onDelete: "CASCADE",
+    }),
+    __metadata("design:type", Array)
+], User.prototype, "searches", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)("Users")
 ], User);

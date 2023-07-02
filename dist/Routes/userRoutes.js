@@ -15,5 +15,4 @@ routes.get("/followings", isAuth_1.default, attachCurretnUser_1.authMiddleware, 
 routes.put("/updateUser", isAuth_1.default, attachCurretnUser_1.authMiddleware, new UserController_1.UserController().updateUser);
 routes.get("/followers/:userId", isAuth_1.default, attachCurretnUser_1.authMiddleware, new UserController_1.UserController().getFollowers);
 routes.get("/followings/:userId", isAuth_1.default, attachCurretnUser_1.authMiddleware, new UserController_1.UserController().getFollowings);
-routes.get(`/search`, isAuth_1.default, attachCurretnUser_1.authMiddleware, new UserController_1.UserController().searchBar);
 exports.default = routes;
