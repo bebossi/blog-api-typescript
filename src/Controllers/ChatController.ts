@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { chatRepository } from "../repositories/chatRepository";
 import { userRepository } from "../repositories/userRepository";
+
 export class ChatController {
   async createChat(req: Request, res: Response) {
     try {
