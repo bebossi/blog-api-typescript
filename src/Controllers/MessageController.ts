@@ -29,7 +29,6 @@ export class MessageController {
           error: "You are not authorized to send a message in this chat.",
         });
       }
-      console.log(chat);
 
       const message = messageRepository.create();
 

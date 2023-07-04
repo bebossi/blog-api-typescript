@@ -88,8 +88,6 @@ export class ChatController {
         .addSelect(["recipientId.id", "recipientId.userName"]) // Add the columns you want to select from the recipient entity
         .getOne();
 
-      console.log(chat);
-
       return res.status(200).json(chat);
     } catch (err) {
       console.log(err);
