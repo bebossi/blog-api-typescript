@@ -11,4 +11,12 @@ routes.post(
   new ChatController().createChat
 );
 
+routes.get("/chats", isAuth, authMiddleware, new ChatController().getChats);
+routes.get(
+  "/chat/:userId",
+  isAuth,
+  authMiddleware,
+  new ChatController().getChat
+);
+
 export default routes;

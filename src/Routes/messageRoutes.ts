@@ -5,4 +5,11 @@ import { MessageController } from "../Controllers/MessageController";
 
 const routes = Router();
 
+routes.post(
+  "/message/:userId/:chatId",
+  isAuth,
+  authMiddleware,
+  new MessageController().sendMessage
+);
+
 export default routes;
