@@ -19,4 +19,11 @@ routes.get(
   new ChatController().getChat
 );
 
+routes.delete(
+  "/deleteChat/:chatId",
+  isAuth,
+  authMiddleware,
+  new ChatController().deleteChat
+);
+
 export default routes;

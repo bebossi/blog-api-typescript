@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { chatRepository } from "../repositories/chatRepository";
 import { userRepository } from "../repositories/userRepository";
+import { ArrayContains, ArrayOverlap, FindOperator } from "typeorm";
+import { Chat } from "../entities/Chat";
 
 export class ChatController {
   async createChat(req: Request, res: Response) {
@@ -17,6 +19,22 @@ export class ChatController {
 
       if (!currentUser || !user) {
         throw new Error("Invalid user data");
+      }
+
+      const existingChat = await chatRepository
+        .createQueryBuilder("chat")
+        .leftJoinAndSelect("chat.users", "user")
+        .innerJoin(
+          "chat.users",
+          "currentUser",
+          "currentUser.id = :currentUserId",
+          { currentUserId }
+        )
+        .where("user.id = :userId", { userId })
+        .getOne();
+
+      if (existingChat) {
+        return res.status(400).json("this chat already exists");
       }
 
       const chat = chatRepository.create();
@@ -91,6 +109,37 @@ export class ChatController {
       return res.status(200).json(chat);
     } catch (err) {
       console.log(err);
+    }
+  }
+  async deleteChat(req: Request, res: Response) {
+    try {
+      const currentUserId = req.currentUser?.id;
+      const { userId, chatId } = req.params;
+
+      const chat = await chatRepository.findOne({
+        where: { id: Number(chatId) },
+        relations: ["users"],
+      });
+      console.log(chat);
+
+      if (!chat) {
+        return res.status(404).json("Chat not found");
+      }
+
+      const currentUserIncluded = chat.users.some(
+        (user) => user.id === currentUserId
+      );
+
+      if (!currentUserIncluded) {
+        return res.status(403).json("You are not allowed to delete this chat");
+      }
+
+      await chatRepository.remove(chat);
+
+      return res.status(200).json("Chat deleted");
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json("Internal server error");
     }
   }
 }
